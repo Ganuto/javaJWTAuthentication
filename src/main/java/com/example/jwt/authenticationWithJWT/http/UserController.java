@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+
 @RequiredArgsConstructor
 public class UserController {
 
@@ -22,6 +23,6 @@ public class UserController {
             @RequestBody ApplicationUser user
     ) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        applicationUserRepository.save(user);
+        this.applicationUserRepository.save(user);
     }
 }

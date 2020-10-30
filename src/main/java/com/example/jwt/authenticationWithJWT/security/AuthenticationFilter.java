@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,14 +28,13 @@ import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.KE
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws AuthenticationException {
-
         try {
             ApplicationUser applicationUser = this.objectMapper.readValue(request.getInputStream(), ApplicationUser.class);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -55,13 +53,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             HttpServletResponse response,
             FilterChain chain,
             Authentication authResult
-    ) throws IOException, ServletException {
+    ) {
         Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
         Key key = Keys.hmacShaKeyFor(KEY.getBytes());
         Claims claims = Jwts.claims().setSubject(((User) authResult.getPrincipal()).getUsername());
-        String token = Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.ES512).setExpiration(expirationDate).compact();
+        String token = Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.HS512).setExpiration(expirationDate).compact();
         response.addHeader("token", token);
-
-        super.successfulAuthentication(request, response, chain, authResult);
     }
 }
