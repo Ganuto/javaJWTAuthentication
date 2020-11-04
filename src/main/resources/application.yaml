@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/tokenJWT?serverTimezone=UTC
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true

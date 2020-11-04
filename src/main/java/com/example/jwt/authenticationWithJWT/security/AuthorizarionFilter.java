@@ -50,7 +50,7 @@ public class AuthorizarionFilter extends BasicAuthenticationFilter {
             Claims user = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(KEY.getBytes()))
                     .build()
-                    .parseClaimsJws(token.replace(HEADER_PREFIX, ""))
+                    .parseClaimsJws(token.replaceFirst(HEADER_PREFIX, ""))
                     .getBody();
 
             if (Objects.nonNull(user)) {
