@@ -22,8 +22,7 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.EXPIRATION_TIME;
-import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.KEY;
+import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.*;
 
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -58,6 +57,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Key key = Keys.hmacShaKeyFor(KEY.getBytes());
         Claims claims = Jwts.claims().setSubject(((User) authResult.getPrincipal()).getUsername());
         String token = Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.HS512).setExpiration(expirationDate).compact();
-        response.addHeader("token", token);
+        response.addHeader("token", HEADER_PREFIX + token);
     }
 }

@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-
 @RequiredArgsConstructor
 public class UserController {
 
     private final ApplicationUserRepository applicationUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @PostMapping("/record")
+    @PostMapping(value = "/record")
     public void singUp(
             @RequestBody ApplicationUser user
     ) {

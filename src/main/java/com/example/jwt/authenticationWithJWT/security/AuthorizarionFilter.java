@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.HEADER_NAME;
-import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.KEY;
+import static com.example.jwt.authenticationWithJWT.configs.SecurityConstants.*;
 
 public class AuthorizarionFilter extends BasicAuthenticationFilter {
     public AuthorizarionFilter(AuthenticationManager authenticationManager) {
@@ -30,7 +29,6 @@ public class AuthorizarionFilter extends BasicAuthenticationFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws IOException, ServletException {
-
         String header = request.getHeader(HEADER_NAME);
 
         if (Objects.isNull(header)) {
@@ -49,9 +47,10 @@ public class AuthorizarionFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(HEADER_NAME);
 
         if (Objects.nonNull(token)) {
-            Claims user = Jwts.parser()
+            Claims user = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(KEY.getBytes()))
-                    .parseClaimsJws(token)
+                    .build()
+                    .parseClaimsJws(token.replace(HEADER_PREFIX, ""))
                     .getBody();
 
             if (Objects.nonNull(user)) {
